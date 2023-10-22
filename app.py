@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 import yaml
 import json
+import gc
 
 app = Flask(__name__)
 
@@ -76,9 +77,10 @@ def convert_docker_compose_to_portainer_template(compose_yml):
             }
 
             portainer_template["templates"].append(template_entry)
-
+            gc.collect()
         return json.dumps(portainer_template, indent=2)
     except Exception as e:
+        gc.collect()
         return "Error parsing Docker Compose YAML"
 
 
