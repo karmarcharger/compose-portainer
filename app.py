@@ -5,9 +5,12 @@ import gc
 
 app = Flask(__name__)
 
-def convert_docker_compose_to_portainer_template(compose_yml):
+def convert_docker_compose_to_portainer_template(compose_yml, note, logo, description, name, categories):
     try:
         compose_data = yaml.load(compose_yml, Loader=yaml.FullLoader)
+
+        # Split user-provided categories by commas if input is not empty
+        category_list = [c.strip() for c in categories.split(',')] if categories else []
 
         portainer_template = {
             "version": "2",
@@ -26,9 +29,15 @@ def convert_docker_compose_to_portainer_template(compose_yml):
 
             # Add volume mounts
             for volume in service_config.get("volumes", []):
+                parts = volume.split(':')
+                if len(parts) == 2:
+                    container_path = parts[1]
+                else:
+                    container_path = volume
+
                 portainer_service["volumes"].append({
-                    "bind": "/path/to/host/mount",  # Modify this path as needed
-                    "container": volume
+                    "bind": f"/portainer/Files/AppData/Config/{service_name}",  # Use the service_name in bind path
+                    "container": container_path  # Use the second value when split by ":"
                 })
 
             # Extract environment variables
@@ -59,13 +68,16 @@ def convert_docker_compose_to_portainer_template(compose_yml):
             # Extract or default the restart policy
             restart_policy = service_config.get("restart", "unless-stopped")
 
+            # Use the provided name or default to the service_name
+            service_name = name if name else service_name
+
             # Create a Portainer template entry for the service
             template_entry = {
-                "categories": ["Other", "Tools"],
+                "categories": category_list,
                 "env": portainer_service["environment"],
-                "description": f"Description for {service_name}",
+                "description": description,
                 "image": portainer_service["image"],
-                "logo": "https://example.com/logo.png",  # Modify this URL
+                "logo": logo,
                 "name": service_name,
                 "platform": "linux",
                 "ports": portainer_service["ports"],
@@ -73,7 +85,7 @@ def convert_docker_compose_to_portainer_template(compose_yml):
                 "title": service_name,
                 "type": 1,
                 "volumes": portainer_service["volumes"],
-                "note": "<b>Template created by Your Name</b><br><b>Additional notes here</b>"
+                "note": note
             }
 
             portainer_template["templates"].append(template_entry)
@@ -83,17 +95,20 @@ def convert_docker_compose_to_portainer_template(compose_yml):
         gc.collect()
         return "Error parsing Docker Compose YAML"
 
-
 @app.route("/", methods=["GET", "POST"])
 def convert_compose_to_portainer():
     if request.method == "POST":
         compose_yml = request.form.get("compose_yml")
+        note = request.form.get("note")
+        logo = request.form.get("logo")
+        description = request.form.get("description")
+        name = request.form.get("name")
+        categories = request.form.get("categories")
         if compose_yml:
-            portainer_json = convert_docker_compose_to_portainer_template(compose_yml)
+            portainer_json = convert_docker_compose_to_portainer_template(compose_yml, note, logo, description, name, categories)
             return render_template("index.html", compose_yml=compose_yml, portainer_json=portainer_json)
 
     return render_template("index.html")
 
 if __name__ == "__main__":
-
-    app.run(host="0.0.0.0",debug=False, port=8082)
+    app.run(host="0.0.0.0", debug=False, port=8082)
