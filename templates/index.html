@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compose to Portainer Converter</title>
+</head>
+<body>
+    <h1>Docker Compose to Portainer Converter</h1>
+    <form method="POST">
+        <label for="compose_yml">Docker Compose YAML:</label><br>
+        <textarea name="compose_yml" rows="10" cols="80"></textarea><br><br>
+        <input type="submit" value="Convert">
+    </form>
+
+    {% if error %}
+        <p style="color: red">{{ error }}</p>
+    {% endif %}
+
+    {% if portainer_json %}
+        <h2>Portainer JSON:</h2>
+        <textarea rows="20" cols="80" readonly>{{ portainer_json }}</textarea>
+    {% endif %}
+</body>
+</html>
