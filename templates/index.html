@@ -10,9 +10,35 @@
         <form method="POST">
             <div class="form-group">
                 <label for="compose_yml">Docker Compose YAML:</label>
-                <textarea class="form-control" name="compose_yml" rows="10" cols="80"></textarea>
+                <textarea class="form-control" name="compose_yml" rows="10" cols="80">{{ request.form['compose_yml'] }}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Convert</button>
+
+            <div class="form-group">
+                <label for="note">Note:</label>
+                <input type="text" class="form-control" name="note" value="{{ request.form['note'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="logo">Logo URL:</label>
+                <input type="text" class="form-control" name="logo" value="{{ request.form['logo'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="text" class="form-control" name="description" value="{{ request.form['description'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name" value="{{ request.form['name'] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="categories">Categories (comma-separated):</label>
+                <input type="text" class="form-control" name="categories" value="{{ request.form['categories'] }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Convert</button>
         </form>
 
         {% if error %}
