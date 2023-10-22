@@ -9,7 +9,7 @@ you can use https://www.composerize.com/ to convert your docker run commands to 
 WIP
 ```
 #docker run command if you want to just run it on docker instead of installing python
-docker run -p 8082:8082 karmarcharger/docker-compose-to-portainer-json:latest
+docker run -p 8082:8082 karmarcharger/docker-compose-to-portainer-json-march:latest
 ```
 Docker compose
 ```
@@ -18,5 +18,5 @@ services:
     docker-compose-to-portainer-json:
         ports:
             - '8082:8082'
-        image: 'karmarcharger/docker-compose-to-portainer-json:latest'
+        image: 'karmarcharger/docker-compose-to-portainer-json-march:latest'
 ```
