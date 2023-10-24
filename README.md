@@ -1,5 +1,5 @@
 
-[![Docker Image Size](https://badgen.net/docker/size/karmarcharger/docker-compose-to-portainer-json?icon=docker&label=image%20size)](https://hub.docker.com/r/karmarcharger/docker-compose-to-portainer-json-march)
+[![Docker Image Size](https://badgen.net/docker/size/karmarcharger/docker-compose-to-portainer-json-march?icon=docker&label=image%20size)](https://hub.docker.com/r/karmarcharger/docker-compose-to-portainer-json-march)
 # compose-portainer
 Python Flask app to convert compose to portainer.json
 ![image](https://github.com/karmarcharger/compose-portainer/assets/10364143/d957519c-9953-4dcb-abed-74ebf661c0bc)
